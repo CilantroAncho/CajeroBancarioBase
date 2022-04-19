@@ -1,3 +1,4 @@
+import java.io.*;
 import java.util.Scanner;
 
 //Proyecto FInal: Simulacion de Cajero Bancario
@@ -7,7 +8,7 @@ import java.util.Scanner;
 
 public class Principal_menu {
     
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException {
         
         Scanner sc = new Scanner(System.in);
 
@@ -56,7 +57,7 @@ public class Principal_menu {
               break;
             case 2:
               Clientes obj2 = new Clientes();
-
+              obj2.presentar_menu();
               break;
             case 3:
               Efectivo obj3 = new Efectivo();

@@ -97,10 +97,10 @@ public class Cajeros {
                     leer_registro(posicion, archivo);
                     
                     L.nextLine();
-                    System.out.println("Nueva Ubicacion ( "+ ubicacion + " ): ");
+                    System.out.println("Nueva Ubicacion ("+ ubicacion + "): ");
                     ubicacion_de_cajero = L.nextLine();
                     
-                    System.out.println("Nueva Ciudad ( "+ ciudad +" ): ");
+                    System.out.println("Nueva Ciudad ("+ ciudad +"): ");
                     ciudad_de_cajero = L.nextLine();
                     
                     do{
@@ -218,13 +218,14 @@ public class Cajeros {
       
       
   }
+  
   public void consultar() throws FileNotFoundException, IOException{
       
       RandomAccessFile archivo = new RandomAccessFile("Cajeros.dt", "rw");
   
       try {
           
-          System.out.println("Codigo\t Ubicacion\t Ciudad\t Denominacion Menor\t Denominacion Mayor");
+          System.out.println("Codigo\t Ubicacion\t\t Ciudad\t\t Denominacion Menor\t Denominacion Mayor");
           
           long posicion = 0;        
           
@@ -233,7 +234,7 @@ public class Cajeros {
               leer_registro(posicion, archivo);
               posicion = archivo.getFilePointer();
               
-              System.out.println(codigo + "\t" + ubicacion + "\t" + ciudad + "\t" + denominacion_menor + "\t" + denominacion_mayor);
+              System.out.println(codigo + "\t" + ubicacion + " " + ciudad + " " + denominacion_menor + "\t\t\t" + denominacion_mayor);
               
           }
           
