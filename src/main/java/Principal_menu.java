@@ -69,7 +69,7 @@ public class Principal_menu {
             default:
               System.out.println("Adios!");
               correr = false;
-              System.exit(1);
+              System.exit(0);
               break;
 
           }
