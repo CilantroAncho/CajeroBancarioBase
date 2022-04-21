@@ -21,6 +21,7 @@ public class Retiros{
   
   Cajeros obj_cajeros = new Cajeros();
   Clientes obj_clientes = new Clientes();
+  Efectivo obj_efectivo = new Efectivo();
   
   Scanner L = new Scanner(System.in);
 
@@ -85,12 +86,12 @@ public class Retiros{
       String nombre;
       double balance;
       
-      String fecha_;
+      //String fecha_;
       double monto_retirar;
       
-      long posicion_retiros;
       long posicion_cajeros;
       long posicion_clientes;
+      long posicion_efectivo;
       
       boolean correcto = false;
       
@@ -115,6 +116,7 @@ public class Retiros{
               try {
                   
                   posicion_cajeros = obj_cajeros.buscar_codigo(cod_cajero, archivo_cajero);
+                  posicion_efectivo = obj_efectivo.buscar_codigo(cod_cajero, archivo_efectivo);
                   
                   if(posicion_cajeros != 1){
                   
@@ -133,6 +135,7 @@ public class Retiros{
 
                             correcto = true;
                             leer_registros_cliente(posicion_clientes, archivo_cliente);
+                            obj_clientes.leer_registro(posicion_clientes, archivo_cliente);
 
                         }else{
 
@@ -149,7 +152,7 @@ public class Retiros{
                       L.nextLine();
                       //Gerson trabaja esto
                       System.out.println("Fecha: ");
-                      fecha_ = L.nextLine();
+                      fecha = L.nextLine();
                       //Gerson trabaja esto
                       
                       do{
@@ -169,10 +172,28 @@ public class Retiros{
                             monto_retirar = monto_retirar - (cantidad_de_menor * deno_menor);
                             
                             if(monto_retirar == 0.0){
+                                
+                                obj_efectivo.leer(posicion_efectivo, archivo_efectivo);
                             
-                                correcto = true;
-                                cantidad_de_billetes_menor = cantidad_de_menor;
-                                cantidad_de_billetes_mayor = cantidad_de_mayor;
+                                if(obj_efectivo.cantidad_den_mayor > cantidad_de_mayor){
+                                
+                                    if(obj_efectivo.cantidad_den_menor > cantidad_de_menor){
+                                    
+                                        correcto = true;
+                                        cantidad_de_billetes_menor = cantidad_de_menor;
+                                        cantidad_de_billetes_mayor = cantidad_de_mayor;
+                                        
+                                    }else{
+                                    
+                                        System.out.println("No hay suficientes billetes de cantidad menor para esta transaccion.");
+                                        
+                                    }
+                                    
+                                }else{
+                                
+                                    System.out.println("No hay suficientes billetes de cantidad mayor para esta transaccion.");
+                                    
+                                }
                                 
                             }else{
                             
@@ -195,22 +216,18 @@ public class Retiros{
                       
                       obj_clientes.balance = balance_de_cliente;
                       obj_clientes.actualizar_registro(posicion_clientes, archivo_cliente);
-                      //Reducimos balance de cliente
+                      //Reducimos balance de cliente                                         
                       
+                      //Reducimos billetes en efectivo.
                       
+                      obj_efectivo.cantidad_den_menor -= cantidad_de_billetes_menor;
+                      obj_efectivo.cantidad_den_mayor -= cantidad_de_billetes_mayor;
+                      obj_efectivo.actualizar_registro(posicion_efectivo, archivo_efectivo);
                       
-                      posicion_retiros = buscar_codigo(cod_cajero, archivo_retiros);
+                      //Reducimos billetes en efectivo
                       
-                      if(posicion_retiros != 1){
-                      
-                          actualizar_registro(posicion_retiros, archivo_retiros);
+                      actualizar_registro(archivo_retiros.length(), archivo_retiros);
                           
-                      }else{
-                      
-                          actualizar_registro(archivo_retiros.length(), archivo_retiros);
-                          
-                      }
-                      
                       System.out.println("Transaccion Exitosa.");
                       
                   }else{
@@ -221,6 +238,8 @@ public class Retiros{
                   
                   
               } catch (Exception e) {
+                  
+                  e.printStackTrace();
               }
               
           }
