@@ -61,7 +61,7 @@ public class Principal_menu {
               break;
             case 3:
               Efectivo obj3 = new Efectivo();
-
+              obj3.presentar_menu();
               break;
             case 4:
               Retiros obj4 = new Retiros();
