@@ -65,7 +65,7 @@ public class Principal_menu {
               break;
             case 4:
               Retiros obj4 = new Retiros();
-
+              obj4.presentar_menu();
               break;
             default:
               System.out.println("Adios!");

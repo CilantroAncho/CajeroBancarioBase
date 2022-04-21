@@ -75,7 +75,7 @@ public class Cajeros {
       
       try{
       
-        RandomAccessFile archivo = new RandomAccessFile("Cajeros.dt", "rw");
+        RandomAccessFile archivo = new RandomAccessFile("Cajeros.dat", "rw");
         
         while(true){
         
@@ -167,7 +167,6 @@ public class Cajeros {
                         if(denominacion_menor_de_cajero == 100 || denominacion_menor_de_cajero == 200 || denominacion_menor_de_cajero == 500 || denominacion_menor_de_cajero == 1000){
                         
                             correcto = true;
-                            System.out.println(denominacion_menor_de_cajero);
                             
                         }else{
                         
@@ -188,7 +187,6 @@ public class Cajeros {
                         if(denominacion_mayor_de_cajero == 100 || denominacion_mayor_de_cajero == 200 || denominacion_mayor_de_cajero == 500 || denominacion_mayor_de_cajero == 1000){
                         
                             correcto = true;
-                            System.out.println(denominacion_mayor_de_cajero);
                             
                         }else{
                         
@@ -221,7 +219,7 @@ public class Cajeros {
   
   public void consultar() throws FileNotFoundException, IOException{
       
-      RandomAccessFile archivo = new RandomAccessFile("Cajeros.dt", "rw");
+      RandomAccessFile archivo = new RandomAccessFile("Cajeros.dat", "rw");
   
       try {
           

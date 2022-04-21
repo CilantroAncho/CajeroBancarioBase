@@ -72,7 +72,7 @@ public class Efectivo{
       try {
           
           RandomAccessFile archivo_efectivo = new RandomAccessFile("Efectivo.dat", "rw");
-          RandomAccessFile archivo_cajero = new RandomAccessFile("Cajeros.dt", "rw");
+          RandomAccessFile archivo_cajero = new RandomAccessFile("Cajeros.dat", "rw");
           
           while(true){
           
@@ -92,62 +92,68 @@ public class Efectivo{
                   
                   if(posicion_cajero != -1){
                   
-                      leer_registros(posicion_cajero, archivo_cajero);
+                      obj_de_cajeros.leer_registro(posicion_cajero, archivo_cajero);
+                      
+                      if(posicion_efectivo != -1){
+                          
+                        leer(posicion_efectivo, archivo_efectivo);
                       
                         do{
-                        
-                            System.out.println("Nueva denominacion menor ("+ cantidad_den_menor +"): ");
+
+                            System.out.println("Nueva cantidad de denominacion menor ("+ obj_de_cajeros.denominacion_menor +"): ");
                             den_menor = L.nextInt();
-                    
-                            if(den_menor == 100 || den_menor == 200 || den_menor == 500 || den_menor == 1000){
-                        
+
+                            if(den_menor >= 0){
+
                                 correcto = true;
-                            
+
                             }else{
-                        
+
                                 correcto = false;
                                 System.out.println("Error. Intentar otra vez.");
-                            
-                            }
-                        
-                    }while(!correcto);
-                        
-                    correcto = false;
-                    
-                    do{
-                        
-                        System.out.println("Nueva denominacion mayor ("+ cantidad_den_mayor +"): ");
-                        den_mayor = L.nextInt();
-                    
-                        if(den_mayor == 100 || den_mayor == 200 || den_mayor == 500 || den_mayor == 1000){
-                        
-                            correcto = true;
-                            
-                        }else{
-                        
-                            correcto = false;
-                            System.out.println("Error. Intentar otra vez.");
-                            
-                        }
-                        
-                    }while(!correcto);
-                    
-                    cantidad_den_menor = den_menor;
-                    cantidad_den_mayor = den_mayor;
-                    
-                    if(posicion_efectivo != -1){
-                    
-                        actualizar_registro(posicion_efectivo, archivo_efectivo);
-                        
-                    }else{
-                    
-                        actualizar_registro(archivo_efectivo.length(), archivo_efectivo);
-                        
-                    }
 
-                    obj_de_cajeros.denominacion_mayor = cantidad_den_mayor;
-                    obj_de_cajeros.denominacion_menor = cantidad_den_menor;
-                    obj_de_cajeros.actualizar_registro(posicion_cajero, archivo_cajero);
+                            }
+
+                        }while(!correcto);
+
+                        correcto = false;
+
+                        do{
+
+                            System.out.println("Nueva cantidad de denominacion mayor ("+ obj_de_cajeros.denominacion_mayor +"): ");
+                            den_mayor = L.nextInt();
+
+                            if(den_mayor >= 0){
+
+                                 correcto = true;
+
+                             }else{
+
+                                 correcto = false;
+                                 System.out.println("Error. Intentar otra vez.");
+
+                             }
+
+                         }while(!correcto);  
+
+                        cantidad_den_menor = den_menor;
+                        cantidad_den_mayor = den_mayor;
+
+                        actualizar_registro(posicion_efectivo, archivo_efectivo);                        
+                          
+                      }else{
+                          
+                          codigo_cajero = codigo_de_cajero;
+                          
+                          System.out.println("Cantidad de denominacion menor("+obj_de_cajeros.denominacion_menor+"): ");
+                          cantidad_den_menor = L.nextInt();
+                          
+                          System.out.println("Cantidad de denominacion mayor(" + obj_de_cajeros.denominacion_mayor + "): ");
+                          cantidad_den_mayor = L.nextInt();
+                          
+                          actualizar_registro(archivo_efectivo.length(), archivo_efectivo);
+                          
+                      }
                       
                   }else{
                   
@@ -199,15 +205,6 @@ public class Efectivo{
           archivo.close();
           
       }
-      
-  }
-  
-  public void leer_registros(long posicion, RandomAccessFile arch) throws IOException{
-  
-      obj_de_cajeros.leer_registro(posicion, arch);
-      codigo_cajero = obj_de_cajeros.codigo;
-      cantidad_den_menor = obj_de_cajeros.denominacion_menor;
-      cantidad_den_mayor = obj_de_cajeros.denominacion_mayor;
       
   }
   

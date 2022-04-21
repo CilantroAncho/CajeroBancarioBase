@@ -68,7 +68,7 @@ public class Clientes{
       
       try {
           
-          RandomAccessFile archivo = new RandomAccessFile("Clientes.dt", "rw");
+          RandomAccessFile archivo = new RandomAccessFile("Clientes.dat", "rw");
           
           while(true){
           
@@ -171,11 +171,11 @@ public class Clientes{
   
   public void consultar() throws FileNotFoundException, IOException{
   
-      RandomAccessFile archivo = new RandomAccessFile("Clientes.dt", "rw");
+      RandomAccessFile archivo = new RandomAccessFile("Clientes.dat", "rw");
   
       try {
           
-          System.out.println("Codigo\t Nombre\t Cuenta\t Balance");
+          System.out.println("Codigo\t Nombre\t\t\t Cuenta\t Balance");
           
           long posicion = 0;        
           
