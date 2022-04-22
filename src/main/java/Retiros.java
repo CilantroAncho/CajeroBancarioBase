@@ -25,7 +25,7 @@ public class Retiros{
   
   Scanner L = new Scanner(System.in);
 
-  public void presentar_menu(){
+  public void presentar_menu() throws IOException{
 
     int opcion = -1;
 
@@ -210,11 +210,11 @@ public class Retiros{
                         }
                                                   
                       }while(!correcto);                                            
-                      //Reducimos balance de cliente
-                      retiro = monto_retirar;           
-                      balance_de_cliente -= retiro;                 
+                      //Reducimos balance de cliente  
                       
-                      obj_clientes.balance = balance_de_cliente;
+                      retiro = (obj_cajeros.denominacion_mayor * cantidad_de_billetes_mayor) + (obj_cajeros.denominacion_menor * cantidad_de_billetes_menor);
+                      
+                      obj_clientes.balance -= (obj_cajeros.denominacion_mayor * cantidad_de_billetes_mayor) + (obj_cajeros.denominacion_menor * cantidad_de_billetes_menor);
                       obj_clientes.actualizar_registro(posicion_clientes, archivo_cliente);
                       //Reducimos balance de cliente                                         
                       
@@ -252,12 +252,96 @@ public class Retiros{
       
   }
   
-  public void consultar(){}
+  public void consultar() throws FileNotFoundException, IOException{
+  
+        RandomAccessFile archivo_retiros = new RandomAccessFile("Retiros.dat", "rw");
+        RandomAccessFile archivo_cliente = new RandomAccessFile("Clientes.dat", "rw");
+        
+        int num_cuenta;
+        long posicion_clientes;
+        boolean correcto = false;
+      
+        try {
+            
+            do{
+                      
+                System.out.println("Numero de cuenta: ");
+                num_cuenta = L.nextInt();
+                
+                if(num_cuenta == 0){
+                
+                    break;
+                    
+                }
+                      
+                posicion_clientes = obj_clientes.buscar_codigo(num_cuenta, 2, archivo_cliente);
+                      
+                if(posicion_clientes != -1){
+
+                    correcto = true;
+                    leer_registros_cliente(posicion_clientes, archivo_cliente);
+                    obj_clientes.leer_registro(posicion_clientes, archivo_cliente);
+                    
+                    System.out.println("<<" + nombre_de_cliente + ">>");
+                    System.out.println("<<" + balance_de_cliente + ">>");
+                    
+                    System.out.println("Cod. Cajero\tFecha\tMonto");
+                    
+                    long posicion = buscar_codigo(num_cuenta, archivo_retiros);
+                    
+                    if(posicion != -1){
+                        
+                        try {
+                            
+                            while(true){
+                        
+                            leer(posicion, archivo_retiros);
+                            posicion = archivo_retiros.getFilePointer();
+              
+                            System.out.println(codigo_cajero + "\t" + fecha + "\t" + retiro);
+                            
+                            }
+                            
+                        } catch (Exception e) {
+                            
+                            System.out.println("Fin de archivo.");
+                            
+                        }finally{
+                        
+                            archivo_retiros.close();
+                            archivo_cliente.close();
+          
+                            
+                        }                  
+                        
+                    }else{
+                    
+                        System.out.println("No tiene retiros.");
+                        
+                    }
+
+                }else{
+
+                    System.out.println("Numero de cuenta no existe. Intentalo otra vez.");
+                    correcto = false;
+
+                }
+                          
+            }while(!correcto);
+            
+          
+          
+      } catch (Exception e) {
+          
+          e.printStackTrace();
+          
+      }
+  
+  }
   
     public long buscar_codigo(int cod_, RandomAccessFile archivo){
   
       long pos_ = 0;
-      int cod;
       
       try {
           
@@ -265,12 +349,12 @@ public class Retiros{
           
           while(true){
           
-              cod = archivo.readInt();
+              codigo_cajero = archivo.readInt();
               numero_de_cuenta_cliente = archivo.readInt();
               fecha = archivo.readLine();
-              balance_de_cliente = archivo.readDouble();
+              retiro = archivo.readDouble();            
               
-              if(cod == cod_){
+              if(numero_de_cuenta_cliente == cod_){
               
                   break;
                   
@@ -288,7 +372,17 @@ public class Retiros{
       
       return pos_;
       
-  }    
+  }
+
+    public void leer(long posicion, RandomAccessFile archivo) throws IOException{
+        
+        archivo.seek(posicion);
+        codigo_cajero = archivo.readInt();
+        numero_de_cuenta_cliente = archivo.readInt();
+        fecha = archivo.readLine();
+        balance_de_cliente = archivo.readDouble();
+        
+    }
   
     public void leer_registros_cajero(long posicion, RandomAccessFile arch) throws IOException{
   
@@ -316,7 +410,7 @@ public class Retiros{
       archivo.writeInt(codigo_cajero);
       archivo.writeInt(numero_de_cuenta_cliente);
       archivo.writeBytes( TamanoStr(fecha, 10) + "\r\n" );      
-      archivo.writeDouble(balance_de_cliente);
+      archivo.writeDouble(retiro);
       
       
   }
