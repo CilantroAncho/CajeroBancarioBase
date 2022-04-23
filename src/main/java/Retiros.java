@@ -1,4 +1,7 @@
 import java.io.*;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Locale;
 import java.util.Scanner;
 
 public class Retiros{
@@ -151,8 +154,25 @@ public class Retiros{
                       System.out.println("<<" + nombre_de_cliente + ">>");
                       L.nextLine();
                       //Gerson trabaja esto
-                      System.out.println("Fecha: ");
-                      fecha = L.nextLine();
+                      
+                      do {
+
+                        System.out.println("Fecha: ");
+                        fecha = L.nextLine();
+                        
+                        if(isFechaValida(fecha)){
+                        
+                            correcto = true;
+                            
+                        }else{
+                        
+                            System.out.println("Fecha invalida.");
+                            correcto = false;
+                            
+                        }
+                          
+                      } while (!correcto);
+                      
                       //Gerson trabaja esto
                       
                       do{
@@ -183,6 +203,26 @@ public class Retiros{
                                         cantidad_de_billetes_menor = cantidad_de_menor;
                                         cantidad_de_billetes_mayor = cantidad_de_mayor;
                                         
+                                        //Reducimos balance de cliente  
+                      
+                                        retiro = (obj_cajeros.denominacion_mayor * cantidad_de_billetes_mayor) + (obj_cajeros.denominacion_menor * cantidad_de_billetes_menor);
+
+                                        obj_clientes.balance -= (obj_cajeros.denominacion_mayor * cantidad_de_billetes_mayor) + (obj_cajeros.denominacion_menor * cantidad_de_billetes_menor);
+                                        obj_clientes.actualizar_registro(posicion_clientes, archivo_cliente);
+                                        //Reducimos balance de cliente                                         
+
+                                        //Reducimos billetes en efectivo.
+
+                                        obj_efectivo.cantidad_den_menor -= cantidad_de_billetes_menor;
+                                        obj_efectivo.cantidad_den_mayor -= cantidad_de_billetes_mayor;
+                                        obj_efectivo.actualizar_registro(posicion_efectivo, archivo_efectivo);
+
+                                        //Reducimos billetes en efectivo
+
+                                        actualizar_registro(archivo_retiros.length(), archivo_retiros);
+
+                                        System.out.println("Transaccion Exitosa.");
+                                        
                                     }else{
                                     
                                         System.out.println("No hay suficientes billetes de cantidad menor para esta transaccion.");
@@ -210,25 +250,7 @@ public class Retiros{
                         }
                                                   
                       }while(!correcto);                                            
-                      //Reducimos balance de cliente  
                       
-                      retiro = (obj_cajeros.denominacion_mayor * cantidad_de_billetes_mayor) + (obj_cajeros.denominacion_menor * cantidad_de_billetes_menor);
-                      
-                      obj_clientes.balance -= (obj_cajeros.denominacion_mayor * cantidad_de_billetes_mayor) + (obj_cajeros.denominacion_menor * cantidad_de_billetes_menor);
-                      obj_clientes.actualizar_registro(posicion_clientes, archivo_cliente);
-                      //Reducimos balance de cliente                                         
-                      
-                      //Reducimos billetes en efectivo.
-                      
-                      obj_efectivo.cantidad_den_menor -= cantidad_de_billetes_menor;
-                      obj_efectivo.cantidad_den_mayor -= cantidad_de_billetes_mayor;
-                      obj_efectivo.actualizar_registro(posicion_efectivo, archivo_efectivo);
-                      
-                      //Reducimos billetes en efectivo
-                      
-                      actualizar_registro(archivo_retiros.length(), archivo_retiros);
-                          
-                      System.out.println("Transaccion Exitosa.");
                       
                   }else{
                   
@@ -428,5 +450,16 @@ public class Retiros{
       return tH;
   
   }
+    
+     public static boolean isFechaValida(String fecha) {
+        try {
+            SimpleDateFormat formatoFecha = new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault());
+            formatoFecha.setLenient(false);
+            formatoFecha.parse(fecha);
+        } catch (ParseException e) {
+            return false;
+        }
+        return true;
+    }
   
 }

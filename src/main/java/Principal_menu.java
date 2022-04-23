@@ -4,7 +4,7 @@ import java.util.Scanner;
 //Proyecto FInal: Simulacion de Cajero Bancario
 //INF-167-006
 //1-21-0012 Raynick Rosario
-//X-XX-XXXX Gerson Santos
+//1-21-0395 Gerson Santos
 
 public class Principal_menu {
     
